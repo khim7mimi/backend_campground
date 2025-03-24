@@ -1,0 +1,84 @@
+@startuml
+left to right direction
+package "TongA"{
+    class "<<Application>>\nTongAService" as TongAService{}
+    package "Campground"{
+        class "<<Resource>>\nCampgrounds" as ResourceCampgrounds{
+            <<GET>> +getCampgrounds(): Campground
+            <<POST>> +createCampground(): Campground
+        }
+
+        class "<<Resource>>\nCampground" as ResourceCampground {
+            <<GET>> +getCampground(): Campground
+            <<PUT>> +updateCampground(): Campground
+            <<DELETE>> +deleteCampground(): void
+        }
+
+        class "<<Representation>>\nCampground" as RepresentationCampground {
+            -name
+            -address
+            -district
+            -province
+            -postalcode
+            -telephone
+        }
+    }
+
+    package "Auth"{
+        class "<<Resource>>\nAuth" as ResourceAuth{
+            <<POST>> +register(): void
+            <<POST>> +login(): void
+            <<GET>> +getMe(): User
+            <<POST>> +logOut(): void
+            
+        }
+
+        
+
+        class "<<Representation>>\nUser" as RepresentationAuth{
+            -name
+            -email
+            -role
+            -password
+            -telephone
+            -createAt
+        }
+    }
+
+    package "Booking"{
+        class "<<Resource>>\nBookings" as ResourceBookings{
+            <<POST>> +addBooking(): void
+            <<GET>> +getBookings(): User
+        }
+
+        class "<<Resource>>\nBooking" as ResourceBooking{
+            <<PUT>> +updateBooking(): Booking
+            <<DELETE>> +deleteBooking(): void
+            <<GET>> +getBooking(): Booking
+        }
+
+        class "<<Representation>>\nBooking" as RepresentationBooking{
+            -appDate
+            -user
+            -campground
+            -createAt
+        }
+    }
+
+}
+
+TongAService ..> ResourceCampgrounds:"/campgrounds\n<<Path>>"
+ResourceCampgrounds ..> ResourceCampground: "/{campgroundId}\n<<Path>>"
+ResourceCampground ..> RepresentationCampground: "<<use>>"
+
+TongAService ..>  ResourceAuth: "/auth/register\n<<Path>>"
+TongAService ..>  ResourceAuth: "/auth/login\n<<Path>>"
+TongAService ..>  ResourceAuth: "/auth/me\n<<Path>>"
+TongAService ..>  ResourceAuth: "/auth/logout\n<<Path>>"
+ResourceAuth ..> RepresentationAuth : "<<use>>"
+
+TongAService ..> ResourceBookings:"/bookings\n<<Path>>"
+ResourceBookings ..> ResourceBooking: "/{bookingId}\n<<Path>>"
+ResourceBooking ..> RepresentationBooking: "<<use>>"
+
+@enduml

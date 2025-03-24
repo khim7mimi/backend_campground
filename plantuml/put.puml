@@ -1,0 +1,23 @@
+@startuml Manage HCampground (PUT)
+
+header TongA Sequence Diagram
+footer Page %page% of %lastpage%
+title "Manage Campground (PUT)"
+
+participant "Client" as client
+participant "<<javaScript>>\n:server" as server
+participant "<<router>>\n:campgrounds" as routerCampgrounds
+participant "<<controllers>>\n:campgrounds" as controllersCampgrounds
+participant "<<model>>\n:Campground" as modelCampground
+database "<<MongoDB>>\n:campgrounds" as CampgroundsDatabase
+
+client->server ++:req.put('/campgrounds/:id', campgroundData)
+server->routerCampgrounds ++:app.use('/campgrounds',campgrounds)
+routerCampgrounds -> controllersCampgrounds ++:updateCampground(req, res)
+controllersCampgrounds->modelCampground ++:create(req.body)
+modelCampground ->CampgroundsDatabase ++: CampgroundSchema
+CampgroundsDatabase --> modelCampground --: campground
+controllersCampgrounds <-- modelCampground --:campground
+controllersCampgrounds->client --:response
+
+@enduml

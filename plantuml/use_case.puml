@@ -1,0 +1,55 @@
+@startuml
+left to right direction
+
+actor User
+actor Admin
+
+rectangle "Authentication System" {
+    (Register) .> (Login) : <<include>>
+    User -- (Register)
+    User -- (Login)
+    User -- (Logout)
+    Admin -- (Login)
+    Admin -- (Logout)
+}
+
+rectangle "Campground System" {
+    User -- (View All Campgrounds)
+    User -- (View One Campground)
+    
+    Admin -- (View All Campgrounds)
+    Admin -- (View One Campground)
+    Admin -- (Create Campground)
+    Admin -- (Update Campground)
+    Admin -- (Delete Campground)
+    
+    (View All Campgrounds) .> (Login) : <<include>>
+    (View One Campground) .> (Login) : <<include>>
+    (Create Campground) .> (Login) : <<include>>
+    (Update Campground) .> (Login) : <<include>>
+    (Delete Campground) .> (Login) : <<include>>
+}
+
+rectangle "Booking System" {
+    User -- (View Own Booking)
+    User -- (Create Booking)
+    User -- (Update Own Booking)
+    User -- (Delete Own Booking)
+
+    Admin -- (View All Bookings)
+    Admin -- (View One Booking)
+    Admin -- (Create Booking)
+    Admin -- (Update Booking)
+    Admin -- (Delete Booking)
+
+    (View Own Booking) .> (Login) : <<include>>
+    (Create Booking) .> (Login) : <<include>>
+    (Update Own Booking) .> (Login) : <<include>>
+    (Delete Own Booking) .> (Login) : <<include>>
+    (View All Bookings) .> (Login) : <<include>>
+    (View One Booking) .> (Login) : <<include>>
+    (Update Booking) .> (Login) : <<include>>
+    (Delete Booking) .> (Login) : <<include>>
+}
+
+@enduml

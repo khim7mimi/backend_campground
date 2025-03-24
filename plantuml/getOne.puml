@@ -1,0 +1,23 @@
+@startuml Manage Campground (GET One)
+
+header TongA Sequence Diagram
+footer Page %page% of %lastpage%
+title "Manage Campground (GET One)"
+
+participant "Client" as client
+participant "<<javaScript>>\n:server" as server
+participant "<<router>>\n:campgrounds" as routerCampgrounds
+participant "<<controllers>>\n:campgrounds" as controllersCampgrounds
+participant "<<model>>\n:Campground" as modelCampground
+database "<<MongoDB>>\n:campgrounds" as CampgroundsDatabase
+
+client->server ++:req.get('/campgrounds/:id')
+server->routerCampgrounds ++:app.use('/campgrounds',campgrounds)
+routerCampgrounds -> controllersCampgrounds ++:getCampground(req, res)
+controllersCampgrounds->modelCampground ++:findById(req.params.id)
+modelCampground ->CampgroundsDatabase ++: CampgroundSchema
+CampgroundsDatabase --> modelCampground --: campground
+controllersCampgrounds <-- modelCampground --: campground
+controllersCampgrounds->client --:response
+
+@enduml
